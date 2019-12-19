@@ -27,6 +27,10 @@ import {
                     </NavItem>
                     <NavItem>
                       <NavLink href="/expenses">Expenses</NavLink>
+                    </NavItem> 
+                    
+                    <NavItem>
+                      <NavLink href="/signin">My Account</NavLink>
                     </NavItem>
                    
                   </Nav>

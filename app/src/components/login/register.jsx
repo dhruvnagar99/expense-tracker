@@ -1,5 +1,5 @@
 import React from "react";
-import loginImg from "../../login.svg";
+import regImg from "../../reg.svg";
 import {Input, Label, Table, Container, Form, FormGroup, Button} from 'reactstrap';
 import { Route , withRouter, Redirect} from 'react-router-dom';
 import App from '../../App';
@@ -8,9 +8,12 @@ export class Register extends React.Component {
     emptyItem = {
         id: 0,
         createddate: new Date(),
-        name: '',
         email: '',
-        password: ''
+        firstName: '',
+        lastName: '',
+        password: '',
+        sso_id: '',
+        State: 'Active'
     }
 
     state = { 
@@ -30,7 +33,9 @@ export class Register extends React.Component {
              item: this.emptyItem 
          };
          this.handleSubmit = this.handleSubmit.bind(this);
-         this.handleNameChange = this.handleNameChange.bind(this);
+         this.handleSSOChange = this.handleSSOChange.bind(this);
+         this.handlefirstNameChange = this.handlefirstNameChange.bind(this);
+         this.handlelastNameChange = this.handlelastNameChange.bind(this);
          this.handleEmailChange = this.handleEmailChange.bind(this);
          this.handlePasswordChange = this.handlePasswordChange.bind(this);
       }
@@ -47,7 +52,7 @@ export class Register extends React.Component {
   
     const item = this.state.item;
 
-    await fetch (`/api/user`, {
+    await fetch (`/api/newUser`, {
         method: 'POST',
         headers :{
             'Accept' : 'application/json',
@@ -62,12 +67,32 @@ export class Register extends React.Component {
     
 }
 
-handleNameChange(event){
+handleSSOChange(event){
     const target = event.target;
     const value = target.value;
-    const name = target.name;
+    const sso_id = target.name;
     let item ={...this.state.item};
-    item[name] = value;
+    item[sso_id] = value;
+    this.setState({item});
+    console.log(this.state);
+}
+
+handlefirstNameChange(event){
+    const target = event.target;
+    const value = target.value;
+    const firstName = target.name;
+    let item ={...this.state.item};
+    item[firstName] = value;
+    this.setState({item});
+    console.log(this.state);
+}
+
+handlelastNameChange(event){
+    const target = event.target;
+    const value = target.value;
+    const lastName = target.name;
+    let item ={...this.state.item};
+    item[lastName] = value;
     this.setState({item});
     console.log(this.state);
 }
@@ -83,9 +108,9 @@ handleEmailChange(event){
 handlePasswordChange(event){
     const target = event.target;
     const value = target.value;
-    const name = target.name;
+    const password = target.name;
     let item ={...this.state.item};
-    item[name] = value;
+    item[password] = value;
     this.setState({item});
     console.log(this.state);
 }
@@ -99,24 +124,38 @@ handlePasswordChange(event){
       <div className="base-container" ref={this.props.containerRef}>
        
         <div className="content">
-          <div className="image">
-            <img src={loginImg} />
-          </div>
+          
           <div className="form">
           <Form onSubmit = {this.handleSubmit}>
-            <div className="form-group">
+            <div className="form-group-register">
             <FormGroup>
               <Label for="name">Username</Label>
-              <Input type="text" name="name" id="name" placeholder="username" onChange={this.handleNameChange} />
+              <Input type="text" name="sso_id" id="sso_id" placeholder="username" onChange={this.handleSSOChange} />
             </FormGroup>
             </div>
-            <div className="form-group">
+
+            <div className="form-group-register">
+            <FormGroup>
+              <Label for="firstName">First Name</Label>
+              <Input type="text" name="firstName" id="firstName" placeholder="first name" onChange={this.handlefirstNameChange} />
+            </FormGroup> 
+            </div>
+
+            <div className="form-group-register">
+            <FormGroup>
+              <Label for="lastName">Last Name</Label>
+              <Input type="text" name="lastName" id="lastName" placeholder="last name" onChange={this.handlelastNameChange} />
+            </FormGroup>
+            </div>
+
+
+            <div className="form-group-register">
             <FormGroup>
               <Label htmlFor="email">Email</Label>
               <Input type="text"  name="email" id="email" placeholder="email" onChange={this.handleEmailChange} />
               </FormGroup>
             </div>
-            <div className="form-group">
+            <div className="form-group-register">
             <FormGroup>
               <Label htmlFor="password">Password</Label>
               <Input type="text" name="password" id="password" placeholder="password" onChange={this.handlePasswordChange} />
