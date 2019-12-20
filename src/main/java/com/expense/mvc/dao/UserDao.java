@@ -2,9 +2,9 @@ package com.expense.mvc.dao;
 
 import com.expense.mvc.model.User;
 
-public interface UserDao {
+public interface UserDao{
 
-	void save(User user);
+	User save(User user);
 	
 	User findById(long id);
 	

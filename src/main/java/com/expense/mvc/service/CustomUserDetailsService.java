@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,17 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.mvc.model.User;
 import com.expense.mvc.model.UserProfile;
+import com.expense.mvc.repository.UserRepository;
 
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService{
 
-	@Autowired
-	private UserService userService;
 	
+	private UserRepository  userRepository;
+	
+	
+	public CustomUserDetailsService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
+
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String ssoId)
 			throws UsernameNotFoundException {
-		User user = userService.findBySso(ssoId);
+		User user = userRepository.findBySsoId(ssoId);
 		System.out.println("User : "+user);
 		if(user==null){
 			System.out.println("User not found");

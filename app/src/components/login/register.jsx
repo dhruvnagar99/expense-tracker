@@ -12,7 +12,7 @@ export class Register extends React.Component {
         firstName: '',
         lastName: '',
         password: '',
-        sso_id: '',
+        ssoId: '',
         State: 'Active'
     }
 
@@ -70,9 +70,9 @@ export class Register extends React.Component {
 handleSSOChange(event){
     const target = event.target;
     const value = target.value;
-    const sso_id = target.name;
+    const ssoId = target.name;
     let item ={...this.state.item};
-    item[sso_id] = value;
+    item[ssoId] = value;
     this.setState({item});
     console.log(this.state);
 }
@@ -130,7 +130,7 @@ handlePasswordChange(event){
             <div className="form-group-register">
             <FormGroup>
               <Label for="name">Username</Label>
-              <Input type="text" name="sso_id" id="sso_id" placeholder="username" onChange={this.handleSSOChange} />
+              <Input type="text" name="ssoId" id="ssoId" placeholder="username" onChange={this.handleSSOChange} />
             </FormGroup>
             </div>
 

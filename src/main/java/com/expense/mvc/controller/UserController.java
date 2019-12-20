@@ -16,9 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.expense.mvc.dao.UserDao;
 import com.expense.mvc.model.User;
 import com.expense.mvc.model.UserProfile;
 import com.expense.mvc.repository.UserRepository;
 import com.expense.mvc.service.UserProfileService;
-import com.expense.mvc.service.UserService;
 
 
 @RestController
@@ -45,10 +45,15 @@ public class UserController {
 	UserProfileService userProfileService;
 	
 	@Autowired
-	UserService userService;
-
+	private UserDao dao;
+	
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	
 	public UserController(UserRepository userRepository) {
-		super();
+		
 		this.userRepository = userRepository;
 	}
 	
@@ -65,44 +70,77 @@ public class UserController {
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
-//	@PostMapping("/user")
-//	ResponseEntity<User> createUser(@Valid @RequestBody User user) throws URISyntaxException{
-//		User result = userRepository.save(user);
-//		return ResponseEntity.created(new URI("/api/user"+result.getId())).body(result);
-//		
-//		
-//	}
+	@PostMapping("/newUser")
+	ResponseEntity<User> createUser(@Valid @RequestBody User user) throws URISyntaxException{
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		//dao.save(user);
+		userRepository.save(user);
+		return ResponseEntity.created(new URI("/api/user"+user.getId())).body(user);
+		
+		
+	}
 	
 	/*
 	 * This method will be called on form submission, handling POST request It
 	 * also validates the user input
 	 */
-	@PostMapping("/newUser")
-	public String saveRegistration(@Valid User user,
-			BindingResult result, ModelMap model) {
+//	@PostMapping("/newUser")
+//	public String saveRegistration(@Valid User user,
+//			BindingResult result, ModelMap model) {
+//
+//		if (result.hasErrors()) {
+//			System.out.println("There are errors");
+//			return "newuser";
+//		}
+//		userService.save(user);
+//		
+//		System.out.println("First Name : "+user.getFirstName());
+//		System.out.println("Last Name : "+user.getLastName());
+//		System.out.println("SSO ID : "+user.getSsoId());
+//		System.out.println("Password : "+user.getPassword());
+//		System.out.println("Email : "+user.getEmail());
+//		System.out.println("Checking UsrProfiles....");
+//		if(user.getUserProfiles()!=null){
+//			for(UserProfile profile : user.getUserProfiles()){
+//				System.out.println("Profile : "+ profile.getType());
+//			}
+//		}
+//		
+//		model.addAttribute("success", "User " + user.getFirstName() + " has been registered successfully");
+//		return "registrationsuccess";
+//	}
 
-		if (result.hasErrors()) {
-			System.out.println("There are errors");
-			return "newuser";
-		}
-		userService.save(user);
-		
-		System.out.println("First Name : "+user.getFirstName());
-		System.out.println("Last Name : "+user.getLastName());
-		System.out.println("SSO ID : "+user.getSsoId());
-		System.out.println("Password : "+user.getPassword());
-		System.out.println("Email : "+user.getEmail());
-		System.out.println("Checking UsrProfiles....");
-		if(user.getUserProfiles()!=null){
-			for(UserProfile profile : user.getUserProfiles()){
-				System.out.println("Profile : "+ profile.getType());
-			}
-		}
-		
-		model.addAttribute("success", "User " + user.getFirstName() + " has been registered successfully");
-		return "registrationsuccess";
-	}
-
+	
+	
+//	@PostMapping("/newUser")
+//	public User saveRegistration(@Valid User user,
+//			BindingResult result, ModelMap model) {
+//
+//		if (result.hasErrors()) {
+//			System.out.println("There are errors");
+//			return null;
+//		}
+//		
+//		
+//		System.out.println("First Name : "+user.getFirstName());
+//		System.out.println("Last Name : "+user.getLastName());
+//		System.out.println("SSO ID : "+user.getSsoId());
+//		System.out.println("Password : "+user.getPassword());
+//		System.out.println("Email : "+user.getEmail());
+//		System.out.println("Checking UsrProfiles....");
+//		if(user.getUserProfiles()!=null){
+//			for(UserProfile profile : user.getUserProfiles()){
+//				System.out.println("Profile : "+ profile.getType());
+//			}
+//		}
+//		
+//		model.addAttribute("success", "User " + user.getFirstName() + " has been registered successfully");
+//		return userRepository.save(user);
+//	}
+	
+	
+	
+	
 	
 	
 	
